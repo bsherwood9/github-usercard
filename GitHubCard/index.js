@@ -61,16 +61,29 @@ const infoCard = userInfo => {
 
   card.classList.add("card");
   cardInfo.classList.add("card-info");
+  cardInfo.style.width = "80%";
+  cardInfo.style.position = "relative";
   username.classList.add("name");
   image.src = userInfo.avatar_url;
+  image.style.display = "none";
   username.textContent = userInfo.login;
-  location.textContent = userInfo.location;
+  location.textContent = `Location: ${userInfo.location}`;
+  location.style.display = "none";
   profile.textContent = "Profile:";
-  address.href = userInfo.url;
-  address.textContent = userInfo.url;
+  profile.style.display = "none";
+  address.href = userInfo.html_url;
+  address.textContent = userInfo.html_url;
+  address.style.fontSize = "1.3rem";
+  address.style.textDecoration = "none";
+  address.style.color = "inherit";
+  address.style.paddingTop = "1%";
+  address.style.paddingBottom = "2%";
+  address.style.paddingLeft = "10%";
+  address.style.display = "none";
   followers.textContent = `Followers: ${userInfo.followers}`;
   following.textContent = `Following: ${userInfo.following}`;
   bio.textContent = `Bio: ${userInfo.bio}`;
+  bio.style.display = "none";
 
   card.appendChild(image);
   card.appendChild(cardInfo);
@@ -81,6 +94,40 @@ const infoCard = userInfo => {
   cardInfo.appendChild(followers);
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
+
+  //adding a button\
+  const btnDiv = document.createElement("div");
+  const btn = document.createElement("button");
+  btn.textContent = "Expand";
+  btn.style.position = "absolute";
+  btn.style.cursor = "pointer";
+  btn.style.left = "50%";
+  btn.style.bottom = -20;
+  btn.style.padding = "3px 10px";
+
+  //adding functionality
+  cardInfo.appendChild(btnDiv);
+  btnDiv.appendChild(btn);
+  btn.addEventListener("click", () => {
+    card.classList.toggle("expand");
+    if (btn.textContent === "Expand") {
+      btn.textContent = "Hide";
+      bio.style.display = "block";
+      address.style.display = "block";
+      profile.style.display = "block";
+      location.style.display = "block";
+      image.style.display = "block";
+      btn.style.left = 0;
+    } else {
+      btn.textContent = "Expand";
+      bio.style.display = "none";
+      address.style.display = "none";
+      profile.style.display = "none";
+      location.style.display = "none";
+      image.style.display = "none";
+      btn.style.left = "50%";
+    }
+  });
 
   return card;
 };
