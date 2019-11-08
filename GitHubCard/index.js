@@ -40,6 +40,15 @@ axios
         entryPoint.appendChild(newCard);
       });
     });
+    //Not sure where to add this. But want it to run after the followers get loaded
+    const quoteData = axios.get(
+      "https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en&callback=?"
+    );
+    quoteData.then(response => {
+      const message = response.data;
+      const cards = getAQuote(message);
+      entryPoint.appendChild(cards);
+    });
   });
 
 //  Step 3: Create a function that accepts a single object as its only argument,
@@ -61,7 +70,7 @@ const infoCard = userInfo => {
 
   card.classList.add("card");
   cardInfo.classList.add("card-info");
-  cardInfo.style.width = "80%";
+  cardInfo.style.width = "100%";
   cardInfo.style.position = "relative";
   username.classList.add("name");
   image.src = userInfo.avatar_url;
@@ -108,7 +117,8 @@ const infoCard = userInfo => {
   //adding functionality
   cardInfo.appendChild(btnDiv);
   btnDiv.appendChild(btn);
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", el => {
+    el.stopPropagation();
     card.classList.toggle("expand");
     if (btn.textContent === "Expand") {
       btn.textContent = "Hide";
@@ -159,3 +169,29 @@ myData.then(response => {
   luishrd
   bigknell
   */
+
+//Lets add some dope quotes and the like.
+
+const getAQuote = data => {
+  const newDiv = document.createElement("div");
+  newDiv.classList.add("card");
+  newDiv.style.textAlign = "center";
+  newDiv.style.background = "black";
+  newDiv.style.color = "white";
+  const cont = document.createElement("div");
+  cont.style.width = "80%";
+  cont.style.margin = "0 auto";
+  cont.style.padding = "3% 0";
+  const text = document.createElement("p");
+  text.textContent = data.quoteText;
+  text.style.fontSize = "1.6rem";
+  const author = document.createElement("h3");
+  author.textContent = `- ${data.quoteAuthor}`;
+  author.style.paddingTop = "1%";
+
+  newDiv.appendChild(cont);
+  cont.appendChild(text);
+  cont.appendChild(author);
+
+  return newDiv;
+};
